@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { signup } from "../features/userSlice";
+import { signUp } from "../features/userSlice";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { db } from "../firebase";
@@ -24,8 +24,7 @@ function Signup() {
         password
       );
       setDoc(doc(db, "users", email), {});
-      dispatch(signup(userCredential.user));
-      console.log(userCredential.user);
+      dispatch(signUp(userCredential.user));
       navigate("/");
     } catch (error) {
       setError(error.message);
@@ -36,7 +35,7 @@ function Signup() {
   return (
     <div className="w-full h-screen ">
       <img
-        className="sm:block absolute w-full h-full object-cover"
+        className="hidden sm:block absolute w-full h-full object-cover"
         src="https://assets.nflxext.com/ffe/siteui/vlv3/a43711df-c428-4f88-8bb3-b2ac5f20608f/20381feb-65a6-4351-be55-57df47e98e91/TR-tr-20230227-popsignuptwoweeks-perspective_alpha_website_small.jpg"
         alt="/"
       />

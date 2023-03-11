@@ -1,9 +1,34 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import requests from "../Requests";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedMovie } from "../features/movieSlice";
+import { selectUser } from "../features/userSlice";
+import { db } from "../firebase";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 
 function Main() {
+  const user = useSelector(selectUser);
   const [movies, setMovies] = useState([]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const userID = doc(db, "users", `${user?.email}`);
+
+  const saveShow = async () => {
+    if (user?.email) {
+      await updateDoc(userID, {
+        savedShow: arrayUnion({
+          id: movie.id,
+          title: movie.title,
+          img: movie.backdrop_path,
+        }),
+      });
+    } else {
+      alert("Please log in to save movie");
+    }
+  };
 
   useEffect(() => {
     axios
@@ -21,6 +46,11 @@ function Main() {
     }
   };
 
+  const playButtonHandler = () => {
+    dispatch(setSelectedMovie(movie));
+    navigate(`/${movie.id}`);
+  };
+
   return (
     <div className="w-ful h-[550px] text-white">
       <div className="w-full h-full">
@@ -33,10 +63,13 @@ function Main() {
         <div className="absolute w-full top-[20%] p-4 md:p-8">
           <h1 className="text-3xl md:text-5xl font-bold">{movie?.title}</h1>
           <div className="my-4">
-            <button className="border bg-gray-300 text-black border-gray-300 py-2 px-5">
+            <button
+              onClick={playButtonHandler}
+              className="border bg-gray-300 text-black border-gray-300 py-2 px-5"
+            >
               Play
             </button>
-            <button className="border  text-white border-gray-300 py-2 px-5 ml-4">
+            <button onClick={saveShow} className="border  text-white border-gray-300 py-2 px-5 ml-4">
               Watch Later
             </button>
           </div>

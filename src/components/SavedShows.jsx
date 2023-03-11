@@ -4,25 +4,25 @@ import { selectUser } from "../features/userSlice";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import { AiFillDelete } from "react-icons/ai"
+import { AiFillDelete } from "react-icons/ai";
 
 const SavedShows = () => {
   const user = useSelector(selectUser);
   const [movies, setMovies] = useState([]);
-  const getUserData = async () => {
-    const docRef = doc(db, "users", `${user?.email}`);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      const data = docSnap.data().savedShow;
-      setMovies(data);
-      console.log(data);
-    } else {
-      console.log("No such document!");
-    }
-  };
 
   useEffect(() => {
+    const getUserData = async () => {
+      const docRef = doc(db, "users", `${user?.email}`);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data().savedShow;
+        setMovies(data);
+      } else {
+        console.log("No such document!");
+      }
+    };
+
     getUserData();
   }, [user]);
 

@@ -9,10 +9,14 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { login, logout } from "./features/userSlice";
 import Signup from "./pages/Signup";
+import MovieVideo from "./pages/MovieVideo";
+import NotFound from "./pages/NotFound";
+import { selectSelectedMovie } from "./features/movieSlice";
 
 function App() {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
+  const movie = useSelector(selectSelectedMovie)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (userAuth) => {
@@ -41,7 +45,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/account" element={<Account />} />
-          <Route path="*" element={<Navigate replace to="/" />} />
+          <Route path={`/${movie?.id}`} element={<MovieVideo />} />
+          <Route path="/404" element={<NotFound />} />
+          <Route path="*" element={<Navigate replace to="/404" />} />
         </Routes>
       )}
     </div>

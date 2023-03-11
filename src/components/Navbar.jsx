@@ -7,7 +7,6 @@ import { auth } from "../firebase";
 
 function Navbar() {
   const user = useSelector((state) => state.user.user);
-  console.log(user);
   const navigate = useNavigate();
 
   const [error, setError] = useState("");
