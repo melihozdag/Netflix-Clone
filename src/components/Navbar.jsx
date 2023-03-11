@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {  logout } from "../features/userSlice";
+import { logout } from "../features/userSlice";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 
@@ -26,6 +26,7 @@ function Navbar() {
 
   return (
     <div className="flex items-center justify-between p-4 z-[100] w-full absolute">
+      {error ? <p className="text-red">{error}</p> : null}
       <Link to="/">
         <h1 className="text-red-600 text-4xl font-bold cursor-pointer">
           NETFLIX
